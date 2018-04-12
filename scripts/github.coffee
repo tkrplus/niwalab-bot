@@ -8,12 +8,53 @@
 #
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
 
+GITHUB_USERNAME = "mmncloud"
+GITHUB_BASE_URL = "https://api.github.com"
+TARGET_ROOM = room: "sandbox"
+
 module.exports = (robot) ->
 
-  robot.hear /^g$/i, (msg) ->
-    msg.send 'hello world'
-    
+  robot.hear /github check/i, (msg) ->
+    msg.send getSlackMentionByName
 
+  # 指定された期間内にコミットイベント（プッシュイベントがない場合は煽る）
+  checkUserCommits = (user, dateFrom, dateTo) ->
+    request = robot.http(getGitHubApiURL "/users/#{user}/events").get()
+    request (err, response, body) ->
+      if err
+        robot.logger.debug err
+        return
+      data = JSON.parse body
+      commitCount = 0
+      for event in data
+        unless event.type == "PushEvent"
+          continue
+        createAt = moment(event.created_at)
+        unless existsBetweenRefDateRange(createAt, dateFrom, dateTo)
+          continue
+        commitCount++
+      if commitCount > 0
+        return
+      message =
+      slackUser = getSlackUserByGitHubUser user
+      message = "#{getSlackMentionByUser(slackUser)}\n#{message}"
+      robot.send TARGET_ROOM, message
+
+    existsBetweenRefDateRange =(createAt, referenceDateFrom, referenceDateTo) ->
+    return referenceDateFrom.isBefore(createAt) and referenceDateTo.isAfter(createAt)
+
+
+  getGitHubApiURL = (path) ->
+    return getGitHubApiURL path, {}
+
+  getGitHubApiURL = (path, paramMap) ->
+    accessToken = if process.env.GITHUB_TOKEN then { access_token: process.env.GITHUB_TOKEN } else {}
+    param = Object.assign accessToken, paramMap
+    paramList = []
+    for key, value of param
+      paramList.push "#{encodeURIComponent(key)}=#{encodeURIComponent(value)}"
+    paramString = paramList.join '&'
+    return "#{GITHUB_BASE_URL}#{path}?#{paramString}"
 
 
   # robot.respond /open the (.*) doors/i, (res) ->
