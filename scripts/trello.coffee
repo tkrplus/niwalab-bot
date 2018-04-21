@@ -10,11 +10,8 @@
 
 _ = require 'lodash'
 moment = require 'moment'
+trelloApiClient = require './utils/TrelloApiClient'
 
-TRELLO_API_KEY = process.env.TRELLO_API_KEY
-TRELLO_TOKEN = process.env.TRELLO_TOKEN
-TRELLO_USERNAME = process.env.TRELLO_USERNAME
-TRELLO_BOARD_NIWALAB = process.env.TRELLO_BOARD_NIWALAB
 TRELLO_BOARD_NIWALAB_TODO = '5a069fb1ca9f92a9ba216a32'
 TRELLO_BOARD_NIWALAB_TODO = '5a069fb1ca9f92a9ba216a32'
 TRELLO_BOARD_LISTING_STOCK = '586b786befdad858766b9748'
@@ -56,11 +53,9 @@ module.exports = (robot) ->
 
   robot.respond /addBookStock (.*)/i, (msg) ->
     bookName = msg.match[1]
-    url = "https://trello.com/1/cards?key=#{TRELLO_API_KEY}&token=#{TRELLO_TOKEN}&name=#{bookName}&idList=#{TRELLO_BOARD_READING_STOCK}"
-    request = robot.http(url).post()
-    request (err, res, body) ->
-      json = JSON.parse body
-      msg.send "ストックに<#{json.url}|#{json.name}>を登録しました。"
+    resBody = trelloApiClient.createCard(bookName, TRELLO_BOARD_READING_STOCK)
+    json = JSON.parse resBody
+    msg.send "ストックに<#{json.url}|#{json.name}>を登録しました。"
 
   robot.respond /addBookList (.*)/i, (msg) ->
     bookName = msg.match[1]
