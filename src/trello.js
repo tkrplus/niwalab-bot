@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import moment from 'moment'
+import trelloApiClient from './utils/TrelloApiClient'
 
 const TRELLO_API_KEY = process.env.TRELLO_API_KEY
 const TRELLO_TOKEN = process.env.TRELLO_TOKEN
@@ -12,11 +13,9 @@ module.exports = ( robot => {
 
   robot.respond(/trello boards/i, msg => {
     const url = "https://trello.com/1/members/#{TRELLO_USERNAME}/boards?key=#{TRELLO_API_KEY}&token=#{TRELLO_TOKEN}&fields=name"
-    const request = robot.http(url).get()
-    request((err, res, body) =>{
-      const json = JSON.parse(body)
-      console.info(json)
-    })
+
+    const res = trelloApiClient.getBoards(TRELLO_USERNAME)
+    console.info(res)
   })
 
   robot.respond(/trello lists (.*)/i, msg => {
