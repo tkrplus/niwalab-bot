@@ -31,7 +31,8 @@
     "moment": "^2.22.1"
   },
   "engines": {
-    "node": "0.10.x"
+    "node": "8.11.x",
+    "npm": "5.6.0"
   },
   "devDependencies": {
     "babel": "^6.23.0",
