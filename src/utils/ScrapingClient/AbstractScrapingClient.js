@@ -1,8 +1,14 @@
 import request from 'request'
 import cheerio from 'cheerio'
 
-class ScrapingClient {
-  doRequest(uri) {
+class AbstractScrapingClient {
+  constructor(domain) {
+    this.domain = domain
+  }
+
+  // TODO: パラメータも受け取れるようにする
+  doGet(path) {
+    const uri = this.domain + path
     return new Promise((resolve, reject) => {
       request(uri, (error, res, body) => {
         if (!error && res.statusCode == 200) {
@@ -16,4 +22,4 @@ class ScrapingClient {
 
 }
 
-export default ScrapingClient
+export default AbstractScrapingClient
