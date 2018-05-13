@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "standard"
+  ],
+  "rules": {
+    "no-console": ["error"],
+    "space-before-function-paren": ["error", "never"]
+  }
+}

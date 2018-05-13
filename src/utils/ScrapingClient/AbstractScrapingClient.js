@@ -11,7 +11,7 @@ class AbstractScrapingClient {
     const uri = this.domain + path
     return new Promise((resolve, reject) => {
       request(uri, (error, res, body) => {
-        if (!error && res.statusCode == 200) {
+        if (!error && res.statusCode === 200) {
           resolve(cheerio.load(body))
         } else {
           reject(error)
@@ -19,7 +19,6 @@ class AbstractScrapingClient {
       })
     })
   }
-
 }
 
 export default AbstractScrapingClient

@@ -2,7 +2,7 @@ import GitHubScrapingClient from './utils/ScrapingClient/GitHubScrapingClient'
 
 const client = new GitHubScrapingClient()
 
-module.exports = ( robot => {
+module.exports = (robot) => {
   robot.respond(/ぎっとはぶ/, msg => {
     sendGitHubActibityResult('tkrplus', msg)
   })
@@ -12,7 +12,7 @@ module.exports = ( robot => {
     sendGitHubActibityResult(username, msg)
   })
 
-  const sendGitHubActibityResult = async (username, msg) => {
+  const sendGitHubActibityResult = async(username, msg) => {
     const result = await client.getGitHubActibity(username)
     const msgText =
       `GitHub活動実績\n` +
@@ -22,4 +22,4 @@ module.exports = ( robot => {
       `${result.user.uri}`
     msg.send(msgText)
   }
-})
+}
