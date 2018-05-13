@@ -20,20 +20,20 @@ class GitHubScrapingClient extends AbstractScrapingClient {
     const startOfMonth = moment().startOf('month')
     const startOfYear = moment().startOf('year')
 
-    for(let i in days){
+    for (let i in days) {
       const dayItem = days[i]
-      if(!dayItem['attribs'] || !dayItem['attribs']['data-date']){
+      if (!dayItem['attribs'] || !dayItem['attribs']['data-date']) {
         continue
       }
       const day = moment(dayItem['attribs']['data-date'])
       const count = parseInt(dayItem['attribs']['data-count'])
-      if(count && day.isSameOrAfter(startOfWeek)){
+      if (count && day.isSameOrAfter(startOfWeek)) {
         countOnWeek++
       }
-      if(count && day.isSameOrAfter(startOfMonth)){
+      if (count && day.isSameOrAfter(startOfMonth)) {
         countOnMonth++
       }
-      if(count && day.isSameOrAfter(startOfYear)){
+      if (count && day.isSameOrAfter(startOfYear)) {
         countOnYear++
       }
     }
@@ -46,18 +46,18 @@ class GitHubScrapingClient extends AbstractScrapingClient {
       },
       week: {
         count: countOnWeek,
-        days: today.diff(startOfWeek,'d'),
-        ratio: 100.0 * countOnWeek / today.diff(startOfWeek,'d')
+        days: today.diff(startOfWeek, 'd'),
+        ratio: 100.0 * countOnWeek / today.diff(startOfWeek, 'd')
       },
       month: {
         count: countOnMonth,
-        days: today.diff(startOfMonth,'d'),
-        ratio: 100.0 * countOnMonth / today.diff(startOfMonth,'d')
+        days: today.diff(startOfMonth, 'd'),
+        ratio: 100.0 * countOnMonth / today.diff(startOfMonth, 'd')
       },
       year: {
         count: countOnYear,
-        days: today.diff(startOfYear,'d'),
-        ratio: 100.0 * countOnYear / today.diff(startOfYear,'d')
+        days: today.diff(startOfYear, 'd'),
+        ratio: 100.0 * countOnYear / today.diff(startOfYear, 'd')
       }
     }
   }
