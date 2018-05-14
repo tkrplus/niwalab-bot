@@ -1,6 +1,8 @@
 import GitHubScrapingClient from './utils/ScrapingClient/GitHubScrapingClient'
+import SlackApiClient from './utils/ApiClient/SlackApiClient'
 
 const client = new GitHubScrapingClient()
+const slackClient = new SlackApiClient()
 
 module.exports = (robot) => {
   robot.respond(/ぎっとはぶ/, msg => {
@@ -20,6 +22,6 @@ module.exports = (robot) => {
       `今月では${result.month.days}日経過した中で \`${result.month.count}\` 回。 ${result.month.ratio.toFixed(1)}%\n` +
       `今年では${result.year.days}日経過した中で \`${result.year.count}\` 回。 ${result.year.ratio.toFixed(1)}%\n` +
       `${result.user.uri}`
-    msg.send(msgText)
+    slackClient.postMessage(msg.envelope.room, msgText)
   }
 }

@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import moment from 'moment'
-import TrelloApiClient from './utils/TrelloApiClient'
+import TrelloApiClient from './utils/ApiClient/TrelloApiClient'
 
 const TRELLO_API_KEY = process.env.TRELLO_API_KEY
 const TRELLO_TOKEN = process.env.TRELLO_TOKEN

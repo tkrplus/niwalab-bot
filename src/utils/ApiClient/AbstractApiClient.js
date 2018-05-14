@@ -1,24 +1,25 @@
 import axios from 'axios'
-import Const from '../const'
+import Const from '../../const'
 
 const { TIME } = Const
 
 class AbstractApiClient {
   constructor(domain) {
+    if (!/^https?:\/\//.test(domain)) {
+      throw new Error('Domain is not set.')
+    }
     this.domain = domain
+    this.headers = {}
   }
 
   addHeader(headerName, headerValue) {
     if (this.headers[headerName]) {
-      throw new Error('#{this.headers[headerName]} is already set.')
+      throw new Error(`Header: ${headerName} is already set.`)
     }
     this.headers[headerName] = headerValue
   }
 
   commonCheck(path) {
-    if (!/^https?:\/\//.test(this.domain)) {
-      throw new Error('Domain is not set.')
-    }
     if (!path) {
       throw new Error('Path is not set.')
     }
